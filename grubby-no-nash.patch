@@ -1,0 +1,154 @@
+--- a/grubby/new-kernel-pkg	2005-01-05 23:59:51.000000000 +0200
++++ b/grubby/new-kernel-pkg	2005-01-06 00:24:20.000000000 +0200
+@@ -110,17 +110,9 @@
+ 	return
+     fi
+ 
+-    # get the root filesystem to use; if it's on a label make sure it's
+-    # been configured. if not, get the root device from mount
+-    rootdevice=$(awk '{ if ($1 !~ /^[ \t]*#/ && $2 == "/") { print $1; }}' /etc/fstab)
+-    short=$(echo $rootdevice | cut -d= -f1)
+-    if [ "$short" == "LABEL" ]; then
+-	label=$(echo $rootdevice | cut -d= -f2 |head -n 1)
+-	device=$(echo "showlabels" | /sbin/nash  --force --quiet | 
+-			awk '$2 == "'$label'" {print $1}')
+-	if [ -z "$device" ]; then
+-	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
+-	fi
++    rootdevice=$(find_root)
++    if [ -z "$rootdevice" ]; then
++	rootdevice=$(mount | awk '$3 == "/" { print $1 }')
+     fi
+ 
+     if [ -n "$cfgGrub" ]; then
+@@ -222,6 +214,130 @@
+     [ -d /lib/modules/$version ] && rm -f /lib/modules/$version/modules.*    
+ }
+ 
++# Copied from geninitrd.
++# would be cool if geninitrd exports find_root() function
++get_label_ext2 () {
++	/sbin/e2label $1 2> /dev/null
++}
++
++get_uuid_ext2 () {
++	/sbin/tune2fs -l $1 2> /dev/null | awk -F: '/UUID:/ {gsub(" ",""); print $2}'
++}
++
++get_label_xfs () {
++	/usr/sbin/xfs_db -x -p xfs_admin -c label -r "$1"|awk -F= '{sub("^\"","", $2); sub("\"$", "", $2); print $2}'
++}
++
++get_uuid_xfs () {
++	/usr/sbin/xfs_db -x -p xfs_admin -c uuid -r "$1"|awk -F= '{print $2}'
++}
++
++find_root() {
++    eval `awk '/^[\t ]*#/ {next} {if ( $2 == "/" ) {print "rootdev=\"" $1 "\"\nrootFs=\"" $3 "\""}}' /etc/fstab`
++    case $rootdev in
++    LABEL=*)
++	    if [ -x /sbin/findfs -a \( "$rootFs." = "ext2." -o "$rootFs." = "ext3." \) ] ; then
++		    rootdev2="`/sbin/findfs $rootdev 2>/dev/null`"
++		    if [ -n "$rootdev2" ] ; then
++			    rootdev=$rootdev2
++			    rootdev_found=1
++		    fi
++	    fi
++	    if [ "$rootdev_found." != "1." ] ; then
++		    case $rootFs in
++		    ext2|ext3)
++			    if [ ! -x /sbin/e2label ] ; then
++				    echo "/sbin/e2label is missing" 1>&2
++				    exit 1
++			    fi
++			    get_label="get_label_ext2"
++			    ;;
++		    xfs)
++			    if [ ! -x /usr/sbin/xfs_db ] ; then
++				    echo "/usr/sbin/xfs_db is missing" 1>&2
++				    exit 1
++			    fi
++			    get_label="get_label_xfs"
++			    ;;
++		    *)
++			    echo "LABEL on $rootFs in not supported by geninitrd" 1>&2
++			    exit 1
++			    ;;
++		    esac
++		    if [ ! -r /proc/partitions ] ; then
++			    echo '/proc/partitions is not readable'; 1>&2
++			    exit 1
++		    fi
++		    label=${rootdev#"LABEL="}
++		    for dev in `awk 'BEGIN {getline;getline} {print "/dev/" $4}' /proc/partitions` ; do
++			    if [ -r $dev ] && [ "$label" = "`$get_label $dev`" ] ; then
++				    if [ -n "$verbose" ] ; then
++					    echo "Using $dev as device for rootfs"
++				    fi
++				    rootdev=$dev
++				    rootdev_found=1
++				    break
++			    fi
++		    done
++		    if [ "$rootdev_found." != "1." ] ; then
++			    echo "geninitrd can't find real device for LABEL=$label" 1>&2
++			    exit 1
++		    fi
++	    fi
++	    ;;
++    UUID=*)
++	    if [ -x /sbin/findfs -a \( "$rootFs." = "ext2." -o "$rootFs." = "ext3." \) ] ; then
++		    rootdev2="`/sbin/findfs $rootdev 2>/dev/null`"
++		    if [ -n "$rootdev2" ] ; then
++			    rootdev=$rootdev2
++			    rootdev_found=1
++		    fi
++	    fi
++	    if [ "$rootdev_found." != "1." ] ; then
++		    case $rootFs in
++		    ext2|ext3)
++			    if [ ! -x /sbin/tune2fs ] ; then
++				    echo "/sbin/tune2fs is missing" 1>&2
++				    exit 1
++			    fi
++			    get_uuid="get_uuid_ext2"
++			    ;;
++		    xfs)
++			    if [ ! -x /usr/sbin/xfs_db ] ; then
++				    echo "/usr/sbin/xfs_db is missing" 1>&2
++				    exit 1
++			    fi
++			    get_label="get_uuid_xfs"
++			    ;;
++		    *)
++			    echo "UUID on $rootFs in not supported by geninitrd" 1>&2
++			    exit 1
++			    ;;
++		    esac
++		    if [ ! -r /proc/partitions ] ; then
++			    echo '/proc/partitions is not readable'; 1>&2
++			    exit 1
++		    fi
++		    uuid=${rootdev#"UUID="}
++		    for dev in `awk 'BEGIN {getline;getline} {print "/dev/" $4}' /proc/partitions` ; do
++			    if [ -r $dev ] && [ "$uuid" = "`$get_uuid $dev`" ] ; then
++				    if [ -n "$verbose" ] ; then
++					    echo "Using $dev as device for rootfs"
++				    fi
++				    rootdev=$dev
++				    rootdev_found=1
++				    break
++			    fi
++		    done
++		    if [ "$rootdev_found" != 1 ] ; then
++			    echo "geninitrd can't find real device for UUID=$uuid" 1>&2
++			    exit 1
++		    fi
++	    fi
++	    ;;
++    esac
++	echo $rootdev
++}
+ 
+ while [ $# -gt 0 ]; do
+     case $1 in
