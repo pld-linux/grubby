@@ -1,0 +1,15 @@
+--- mkinitrd-4.1.18/grubby/new-kernel-pkg~	2005-01-05 22:58:32.000000000 +0200
++++ mkinitrd-4.1.18/grubby/new-kernel-pkg	2005-01-05 23:14:45.000000000 +0200
+@@ -199,10 +199,10 @@
+ 
+ mkinitrd() {
+     [ -n "$verbose" ] && echo "creating initrd $initrdfile using $version"
+-    /sbin/mkinitrd --allow-missing -f $initrdfile $version
++    /sbin/geninitrd -f --initrdfs=rom $initrdfile $version
+     rc=$?
+     if [ $rc != 0 ]; then
+-	echo "mkinitrd failed" >&2
++	echo "geninitrd failed" >&2
+ 	exit 1
+     fi
+ }
