@@ -18,6 +18,7 @@ Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch 
 Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-no-nash.patch
+BuildRequires:	popt-static
 Requires:	geninitrd
 Obsoletes:	mkinitrd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -48,7 +49,7 @@ startowym.
 
 %build
 cd %{name}
-%{__make}
+%{__make} CC="%{__cc}"
 
 %if %{with tests}
 %{__make} test
