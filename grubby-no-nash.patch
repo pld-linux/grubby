@@ -1,6 +1,6 @@
---- a/grubby/new-kernel-pkg	2005-01-05 23:59:51.000000000 +0200
-+++ b/grubby/new-kernel-pkg	2005-01-06 00:24:20.000000000 +0200
-@@ -110,17 +110,9 @@
+--- ../BUILD/mkinitrd-4.1.18/grubby/new-kernel-pkg	2005-01-06 00:44:07.000000000 +0200
++++ a/grubby/new-kernel-pkg	2005-01-06 00:43:51.000000000 +0200
+@@ -110,17 +110,10 @@
  	return
      fi
  
@@ -15,13 +15,14 @@
 -	if [ -z "$device" ]; then
 -	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
 -	fi
-+    rootdevice=$(find_root)
++	find_root
++    rootdevice=$rootdev
 +    if [ -z "$rootdevice" ]; then
-+	rootdevice=$(mount | awk '$3 == "/" { print $1 }')
++		rootdevice=$(mount | awk '$3 == "/" { print $1 }')
      fi
  
      if [ -n "$cfgGrub" ]; then
-@@ -222,6 +214,130 @@
+@@ -222,6 +215,129 @@
      [ -d /lib/modules/$version ] && rm -f /lib/modules/$version/modules.*    
  }
  
@@ -147,7 +148,6 @@
 +	    fi
 +	    ;;
 +    esac
-+	echo $rootdev
 +}
  
  while [ $# -gt 0 ]; do
