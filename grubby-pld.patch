@@ -1,0 +1,16 @@
+--- a/grubby/new-kernel-pkg~	2005-01-05 22:56:13.319792135 +0200
++++ a/grubby/new-kernel-pkg	2005-01-05 22:56:52.095417594 +0200
+@@ -129,10 +129,10 @@
+ 
+ 	if [ -n "$banner" ]; then
+             title="$banner ($version)"
+-	elif [ -f /etc/redhat-release ]; then
+-	    title="$(sed 's/ release.*$//' < /etc/redhat-release) ($version)"
++	elif [ -f /etc/pld-release ]; then
++	    title="$(< /etc/pld-release) ($version)"
+ 	else
+-	    title="Red Hat Linux ($version)"
++	    title="PLD Linux ($version)"
+ 	fi
+ 	/sbin/grubby --add-kernel=$bootPrefix/$kernelName-$version $INITRD    \
+ 		     --copy-default $makedefault --title "$title"	    \
