@@ -12,7 +12,7 @@ Group:		Base
 Source0:	mkinitrd-%{version}.tar.bz2
 # Source0-md5:	42714d928e2725ab1180bfc78b851c9d
 Patch0:		%{name}-menu.lst.patch
-Patch1:		%{name}-pld.patch 
+Patch1:		%{name}-pld.patch
 Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-no-nash.patch
 BuildRequires:	popt-static
@@ -68,5 +68,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/new-kernel-pkg
 %attr(755,root,root) %{_sbindir}/grubby
-%attr(755,root,root) /sbin/installkernel
+%attr(755,root,root) %{_sbindir}/installkernel
 %{_mandir}/man8/grubby.8*
