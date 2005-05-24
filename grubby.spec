@@ -1,6 +1,3 @@
-#
-# TODO: /sbin isn't a place for %config files!
-#
 # Conditional build:
 %bcond_without	tests		# skip tests
 #
@@ -8,7 +5,7 @@ Summary:	Command line tool for configuring grub, lilo, and elilo
 Summary(pl):	Dzia³aj±ce z linii poleceñ narzêdzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	4.1.18
-Release:	0.2
+Release:	1
 Epoch:		0
 License:	GPL
 Group:		Base
@@ -71,5 +68,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/new-kernel-pkg
 %attr(755,root,root) %{_sbindir}/grubby
-%config %attr(755,root,root) /sbin/installkernel
+%attr(755,root,root) /sbin/installkernel
 %{_mandir}/man8/grubby.8*
