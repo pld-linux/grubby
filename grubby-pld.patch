@@ -7,7 +7,7 @@
 -	elif [ -f /etc/redhat-release ]; then
 -	    title="$(sed 's/ release.*$//' < /etc/redhat-release) ($version)"
 +	elif [ -f /etc/pld-release ]; then
-+	    title="$(< /etc/pld-release) ($version)"
++	    title="$(sed 's/^[0-9.]\+ //' < /etc/pld-release) ($version)"
  	else
 -	    title="Red Hat Linux ($version)"
 +	    title="PLD Linux ($version)"
