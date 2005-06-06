@@ -5,7 +5,7 @@ Summary:	Command line tool for configuring grub, lilo, and elilo
 Summary(pl):	Dzia³aj±ce z linii poleceñ narzêdzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	4.1.18
-Release:	1
+Release:	2
 Epoch:		0
 License:	GPL
 Group:		Base
