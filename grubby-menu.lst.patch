@@ -9,3 +9,14 @@
      grubKeywords,			    /* keywords */
      1,					    /* defaultIsIndex */
      1,					    /* defaultSupportSaved */
+--- ../grubby/new-kernel-pkg~	2005-06-01 20:06:00.000000000 +0300
++++ ../grubby/new-kernel-pkg	2005-06-06 22:06:35.000000000 +0300
+@@ -59,7 +59,7 @@
+ else
+     # this leaves i?86 and x86_64
+     liloConfig=/etc/lilo.conf
+-    grubConfig=/boot/grub/grub.conf
++    grubConfig=/boot/grub/menu.lst
+     bootPrefix=/boot
+     liloFlag=lilo
+     isx86="yes"
