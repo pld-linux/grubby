@@ -17,7 +17,6 @@ Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-no-nash.patch
 BuildRequires:	popt-static
 Requires:	geninitrd
-Obsoletes:	mkinitrd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
