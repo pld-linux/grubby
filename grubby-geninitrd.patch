@@ -35,3 +35,38 @@
  	exit 1
      fi
  }
+--- mkinitrd-5.0.4/grubby/new-kernel-pkg~	2007-02-08 20:47:17.087419916 +0200
++++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 20:39:31.000000000 +0200
+@@ -10,6 +10,7 @@
+ # 
+ 
+ PATH=/sbin:/bin:$PATH
++PROGRAM=${0##*/}
+ 
+ lilo=/sbin/lilo
+ 
+@@ -23,6 +24,7 @@
+ fi
+ 
+ [ -f /etc/sysconfig/kernel ] && . /etc/sysconfig/kernel
++. /etc/geninitrd/functions
+ 
+ cfgGrub=""
+ cfgLilo=""
+@@ -113,7 +116,7 @@
+ 	return
+     fi
+ 
+-	find_root
++    find_root /etc/fstab || exit
+     rootdevice=$rootdev
+     if [ -z "$rootdevice" ]; then
+ 		rootdevice=$(mount | awk '$3 == "/" { print $1 }')
+@@ -227,7 +230,6 @@
+     [ -d /lib/modules/$version ] && rm -f /lib/modules/$version/modules.*    
+ }
+ 
+-
+ while [ $# -gt 0 ]; do
+     case $1 in
+ 	--mkinitrd)
