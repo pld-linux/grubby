@@ -1,0 +1,11 @@
+--- mkinitrd-5.0.4/grubby/Makefile~	2005-03-02 05:45:31.000000000 +0200
++++ mkinitrd-5.0.4/grubby/Makefile	2007-02-08 20:57:44.716596722 +0200
+@@ -24,7 +24,7 @@
+ 	fi
+ 
+ grubby:	grubby.o mount_by_label.o
+-	$(CC) -o $@ $^ -Wl,-Bstatic $(LOADLIBES) -Wl,-Bdynamic $(CFLAGS) $(LDFLAGS)
++	$(CC) -o $@ $^ $(LOADLIBES) $(CFLAGS) $(LDFLAGS)
+ 
+ %.o: %.c
+ 	$(CC) -c $(CFLAGS) -o $@ $<
