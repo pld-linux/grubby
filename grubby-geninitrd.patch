@@ -1,5 +1,11 @@
---- mkinitrd-5.0.4/grubby/new-kernel-pkg~	2007-02-08 20:52:12.099247000 +0200
-+++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 20:52:35.604189764 +0200
+--- mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 20:52:35.604189764 +0200
++++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 21:00:08.938393556 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ #
+ # Invoked upon installation or removal of a kernel package, the following
+ # tasks are/can be done here:
 @@ -10,6 +10,7 @@
  # 
  
