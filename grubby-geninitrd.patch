@@ -1,42 +1,5 @@
---- mkinitrd-4.1.18/grubby/new-kernel-pkg	2005-01-05 23:14:45.000000000 +0200
-+++ mkinitrd-4.1.18/grubby/new-kernel-pkg	2005-01-06 00:43:51.000000000 +0200
-@@ -110,17 +110,10 @@
- 	return
-     fi
- 
--    # get the root filesystem to use; if it's on a label make sure it's
--    # been configured. if not, get the root device from mount
--    rootdevice=$(awk '{ if ($1 !~ /^[ \t]*#/ && $2 == "/") { print $1; }}' /etc/fstab)
--    short=$(echo $rootdevice | cut -d= -f1)
--    if [ "$short" == "LABEL" ]; then
--	label=$(echo $rootdevice | cut -d= -f2 |head -n 1)
--	device=$(echo "showlabels" | /sbin/nash  --force --quiet | 
--			awk '$2 == "'$label'" {print $1}')
--	if [ -z "$device" ]; then
--	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
--	fi
-+	find_root
-+    rootdevice=$rootdev
-+    if [ -z "$rootdevice" ]; then
-+		rootdevice=$(mount | awk '$3 == "/" { print $1 }')
-     fi
- 
-     if [ -n "$cfgGrub" ]; then
-@@ -199,10 +192,10 @@
- 
- mkinitrd() {
-     [ -n "$verbose" ] && echo "creating initrd $initrdfile using $version"
--    /sbin/mkinitrd --allow-missing -f $initrdfile $version
-+    /sbin/geninitrd -f --initrdfs=rom $initrdfile $version
-     rc=$?
-     if [ $rc != 0 ]; then
--	echo "mkinitrd failed" >&2
-+	echo "geninitrd failed" >&2
- 	exit 1
-     fi
- }
---- mkinitrd-5.0.4/grubby/new-kernel-pkg~	2007-02-08 20:47:17.087419916 +0200
-+++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 20:39:31.000000000 +0200
+--- mkinitrd-5.0.4/grubby/new-kernel-pkg~	2007-02-08 20:52:12.099247000 +0200
++++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 20:52:35.604189764 +0200
 @@ -10,6 +10,7 @@
  # 
  
@@ -53,16 +16,42 @@
  
  cfgGrub=""
  cfgLilo=""
-@@ -113,7 +116,7 @@
+@@ -113,17 +115,10 @@
  	return
      fi
  
--	find_root
+-    # get the root filesystem to use; if it's on a label make sure it's
+-    # been configured. if not, get the root device from mount
+-    rootdevice=$(awk '{ if ($1 !~ /^[ \t]*#/ && $2 == "/") { print $1; }}' /etc/fstab)
+-    short=$(echo $rootdevice | cut -d= -f1)
+-    if [ "$short" == "LABEL" ]; then
+-	label=$(echo $rootdevice | cut -d= -f2 |head -n 1)
+-	device=$(echo "showlabels" | /sbin/nash  --force --quiet | 
+-			awk '$2 == "'$label'" {print $1}')
+-	if [ -z "$device" ]; then
+-	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
+-	fi
 +    find_root /etc/fstab || exit
-     rootdevice=$rootdev
-     if [ -z "$rootdevice" ]; then
- 		rootdevice=$(mount | awk '$3 == "/" { print $1 }')
-@@ -227,7 +230,6 @@
++    rootdevice=$rootdev
++    if [ -z "$rootdevice" ]; then
++		rootdevice=$(mount | awk '$3 == "/" { print $1 }')
+     fi
+ 
+     if [ -n "$mbkernel" ]; then
+@@ -211,10 +206,10 @@
+ 
+ mkinitrd() {
+     [ -n "$verbose" ] && echo "creating initrd $initrdfile using $version"
+-    /sbin/mkinitrd --allow-missing -f $initrdfile $version
++    /sbin/geninitrd -f --initrdfs=rom $initrdfile $version
+     rc=$?
+     if [ $rc != 0 ]; then
+-	echo "mkinitrd failed" >&2
++	echo "geninitrd failed" >&2
+ 	exit 1
+     fi
+ }
+@@ -234,7 +229,6 @@
      [ -d /lib/modules/$version ] && rm -f /lib/modules/$version/modules.*    
  }
  
