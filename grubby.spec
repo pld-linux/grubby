@@ -2,7 +2,7 @@
 %bcond_without	tests		# skip tests
 #
 Summary:	Command line tool for configuring grub, lilo, and elilo
-Summary(pl):	Dzia³aj±ce z linii poleceñ narzêdzie do konfiguracji gruba, lilo i elilo
+Summary(pl.UTF-8):   DziaÅ‚ajÄ…ce z linii poleceÅ„ narzÄ™dzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	5.0.4
 Release:	2
@@ -27,12 +27,12 @@ yaboot (powerpc) boot loaders. It is primarily designed to be used
 from scripts which install new kernels and need to find information
 about the current boot environment.
 
-%description -l pl
-grubby to dzia³aj±ce z linii poleceñ narzêdzie do uaktualniania i
-wy¶wietlania informacji o plikach konfiguracyjnych bootloaderów grub,
+%description -l pl.UTF-8
+grubby to dziaÅ‚ajÄ…ce z linii poleceÅ„ narzÄ™dzie do uaktualniania i
+wyÅ›wietlania informacji o plikach konfiguracyjnych bootloaderÃ³w grub,
 lilo, elilo (na architekturze ia64) oraz yaboot (na powerpc). Jest
-zaprojektowany g³ównie do u¿ywania z poziomu skryptów instaluj±cych
-nowe j±dra i potrzebuj±cych odczytaæ informacje o aktualnym ¶rodowisku
+zaprojektowany gÅ‚Ã³wnie do uÅ¼ywania z poziomu skryptÃ³w instalujÄ…cych
+nowe jÄ…dra i potrzebujÄ…cych odczytaÄ‡ informacje o aktualnym Å›rodowisku
 startowym.
 
 %prep
