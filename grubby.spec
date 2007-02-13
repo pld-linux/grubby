@@ -2,7 +2,7 @@
 %bcond_without	tests		# skip tests
 #
 Summary:	Command line tool for configuring grub, lilo, and elilo
-Summary(pl.UTF-8):   Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
+Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	5.0.4
 Release:	2
