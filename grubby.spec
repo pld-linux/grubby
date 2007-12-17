@@ -4,16 +4,17 @@
 Summary:	Command line tool for configuring grub, lilo, and elilo
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
-Version:	5.0.4
-Release:	2
+Version:	6.0.24
+Release:	1
 License:	GPL
 Group:		Base
 Source0:	mkinitrd-%{version}.tar.bz2
-# Source0-md5:	2ba9ccda4f10e80239ca86fed9bb81d0
+# Source0-md5:	4bcef73138bb05da98e54cbfe48cb8f1
 Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch
 Patch2:		%{name}-geninitrd.patch
-Patch3:		%{name}-poptshared.patch
+Patch3:		%{name}-c99.patch
+BuildRequires:	libdhcp-devel
 BuildRequires:	popt-devel
 Requires:	geninitrd >= 8243
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -35,6 +36,36 @@ zaprojektowany głównie do używania z poziomu skryptów instalujących
 nowe jądra i potrzebujących odczytać informacje o aktualnym środowisku
 startowym.
 
+%package -n bdevid
+Summary:	Boot-time device identification
+Group:		System
+Requires:	bdevid-libs = %{version}-%{release}
+
+%description -n bdevid
+Boot-time device identification.
+
+%package -n bdevid-libs
+Summary:	Boot-time device identification libraries
+Group:		Development/Libraries
+
+%description -n bdevid-libs
+Boot-time device identification libraries.
+
+%package -n bdevid-devel
+Summary:	Headers and libraries for programs using bdevid
+Group:		Development/Libraries
+
+%description -n bdevid-devel
+Headers and libraries for programs using bdevid.
+
+%package -n python-bdevid
+Summary:	Python bindings for bdevid
+Group:		Libraries/Python
+Requires:	bdevid-libs = %{version}-%{release}
+
+%description -n python-bdevid
+Python bindings for bdevid.
+
 %prep
 %setup -q -n mkinitrd-%{version}
 %patch0 -p1
@@ -43,8 +74,10 @@ startowym.
 %patch3 -p1
 
 %build
-cd %{name}
-%{__make} CC="%{__cc}"
+#cd %{name}
+CFLAGS="%{rpmcflags}"; export CFLAGS
+%{__make} \
+	CC="%{__cc}"
 
 %if %{with tests}
 %{__make} test
@@ -54,7 +87,11 @@ cd %{name}
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C %{name} install \
-	BUILDROOT=$RPM_BUILD_ROOT \
+	DESTDIR=$RPM_BUILD_ROOT \
+	mandir=%{_mandir}
+
+%{__make} -C bdevid install \
+	DESTDIR=$RPM_BUILD_ROOT \
 	mandir=%{_mandir}
 
 install installkernel $RPM_BUILD_ROOT%{_sbindir}
@@ -68,3 +105,24 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/grubby
 %attr(755,root,root) %{_sbindir}/installkernel
 %{_mandir}/man8/grubby.8*
+
+%files -n bdevid
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/bdevid
+%attr(755,root,root) /lib/bdevid/*.so
+
+%files -n bdevid-libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libbdevid.so.*.*.*
+
+%files -n bdevid-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libbdevid.so
+%attr(755,root,root) %{_libdir}/libbdevidprobe.a
+%{_includedir}/bdevid.h
+%{_includedir}/bdevid
+%{_pkgconfigdir}/*.pc
+
+%files -n python-bdevid
+%defattr(644,root,root,755)
+%attr(755,root,root) %{py_sitedir}/bdevid.so
