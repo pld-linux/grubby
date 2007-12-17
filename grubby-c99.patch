@@ -1,0 +1,56 @@
+--- mkinitrd-6.0.24/nash/block.c~	2007-12-14 21:11:23.000000000 +0100
++++ mkinitrd-6.0.24/nash/block.c	2007-12-17 12:54:29.341295240 +0100
+@@ -247,7 +247,8 @@
+         goto err;
+ 
+     slash = strrchr(tmp, '/');
+-    for (ssize_t n = MAX(MIN(strlen(slash), PATH_MAX), 0); n >= 0; n--)
++    ssize_t n;
++    for (n = MAX(MIN(strlen(slash), PATH_MAX), 0); n >= 0; n--)
+         slash[n] = slash[n] == '!' ? '/' : slash[n];
+     if (asprintf(&bdev->dev_path, "/dev%s", slash) < 0)
+         goto err;
+--- mkinitrd-6.0.24/nash/util.h~	2007-12-14 21:11:23.000000000 +0100
++++ mkinitrd-6.0.24/nash/util.h	2007-12-17 13:10:36.400092797 +0100
+@@ -38,6 +38,8 @@
+ 
+ #include "adler32.h"
+ 
++#define LLONG_MAX __LONG_LONG_MAX__
++
+ struct nashContext_s;
+ 
+ extern struct nashContext_s *_nash_context;
+--- mkinitrd-6.0.24/nash/Makefile~	2007-12-14 21:11:23.000000000 +0100
++++ mkinitrd-6.0.24/nash/Makefile	2007-12-17 13:16:37.375283818 +0100
+@@ -26,13 +26,13 @@
+ nash_LIBS += -lgcc_s
+ 
+ nash :: version.h $(OBJECTS) libnash.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(nash_LIBPATHS) -lnash -lbdevid $(nash_LIBS)
++	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(nash_LIBPATHS) -lnash -lbdevid $(nash_LIBS)
+ 
+ libnash.so : libnash.so.$(VERSION)
+ 	ln -sf $< $@
+ 
+ libnash.so.$(VERSION) :: $(libnash_OBJECTS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname="$(shell basename $@)" -shared -o $@ $^ $(nash_LIBPATHS) $(nash_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname="$(shell basename $@)" -shared -o $@ $(libnash_OBJECTS) $(nash_LIBPATHS) $(nash_LIBS)
+ 
+ libnash.pc:: libnash.pc.in
+ 	@sed -e "s/VERSIONSUBST/$(VERSION)/" \
+--- mkinitrd-6.0.24/bdevid/Makefile~	2007-12-14 21:11:23.000000000 +0100
++++ mkinitrd-6.0.24/bdevid/Makefile	2007-12-17 13:55:56.213166348 +0100
+@@ -33,10 +33,10 @@
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(command_LIBS)
+ 
+ $(foreach lib,$(MODULES),$(lib).so) :: %.so : %.o ../nash/wrap.o libbdevidprobe.a
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname="$*.so.$(VERSION)" -o $@ $< ../nash/wrap.o -shared $($*_LIBS) -lbdevidprobe
++	$(CC) $(LDFLAGS) -shared -Wl,-soname="$*.so.$(VERSION)" -o $@ $< ../nash/wrap.o $($*_LIBS) -lbdevidprobe
+ 
+ libbdevid.so.$(VERSION) : $(bdevid_OBJECTS)
+-	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname="$(shell basename $@)" -o $@ $^ $(bdevid_LIBS)
++	$(CC) $(LDFLAGS) -shared -Wl,-soname="$(shell basename $@)" -o $@ $(bdevid_OBJECTS) $(bdevid_LIBS)
+ 
+ libbdevidprobe.a : $(bdevidprobe_OBJECTS)
+ 	$(AR) crs $@ $^
