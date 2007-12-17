@@ -62,9 +62,17 @@ Headers and libraries for programs using bdevid.
 Summary:	Python bindings for bdevid
 Group:		Libraries/Python
 Requires:	bdevid-libs = %{version}-%{release}
+Requires:	nash-libs = %{version}-%{release}
 
 %description -n python-bdevid
 Python bindings for bdevid.
+
+%package -n nash-libs
+Summary:	Nash libraries
+Group:		Development/Libraries
+
+%description -n nash-libs
+Nash libraries.
 
 %prep
 %setup -q -n mkinitrd-%{version}
@@ -86,11 +94,7 @@ CFLAGS="%{rpmcflags}"; export CFLAGS
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} -C %{name} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	mandir=%{_mandir}
-
-%{__make} -C bdevid install \
+%{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	mandir=%{_mandir}
 
@@ -126,3 +130,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python-bdevid
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/bdevid.so
+
+%files -n nash-libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libnash.so.*.*.*
