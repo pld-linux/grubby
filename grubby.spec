@@ -14,7 +14,10 @@ Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch
 Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-c99.patch
-BuildRequires:	libdhcp-devel
+BuildRequires:	device-mapper-devel
+BuildRequires:	e2fsprogs-devel
+BuildRequires:	libdhcp-devel > 1.9
+BuildRequires:	parted-devel >= 1.8.5
 BuildRequires:	popt-devel
 Requires:	geninitrd >= 8243
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -38,7 +41,7 @@ startowym.
 
 %package -n bdevid
 Summary:	Boot-time device identification
-Group:		System
+Group:		Base
 Requires:	bdevid-libs = %{version}-%{release}
 
 %description -n bdevid
