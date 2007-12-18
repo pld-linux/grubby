@@ -22,6 +22,8 @@ BuildRequires:	popt-devel
 Requires:	geninitrd >= 8243
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		specflags_x86_64	-fPIC
+
 %define		_sbindir	/sbin
 
 %description
