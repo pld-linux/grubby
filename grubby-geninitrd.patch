@@ -1,5 +1,5 @@
---- mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 20:52:35.604189764 +0200
-+++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2007-02-08 21:00:08.938393556 +0200
+--- mkinitrd-6.0.9/grubby/new-kernel-pkg~	2007-12-15 17:35:33.000000000 +0200
++++ mkinitrd-6.0.9/grubby/new-kernel-pkg	2007-12-15 17:41:08.258802271 +0200
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/bin/sh
@@ -22,7 +22,7 @@
  
  cfgGrub=""
  cfgLilo=""
-@@ -113,15 +115,10 @@
+@@ -116,15 +116,11 @@
  	return
      fi
  
@@ -35,13 +35,14 @@
 -	if [ -z "$device" ]; then
 -	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
 -	fi
++    # get the root filesystem to use
 +    find_root /etc/fstab || exit
 +    rootdevice=$rootdev
 +    if [ -z "$rootdevice" ]; then
-+		rootdevice=$(mount | awk '$3 == "/" { print $1 }')
++	rootdevice=$(mount | awk '$3 == "/" { print $1 }')
      fi
  
-     if [ -n "$mbkernel" ]; then
+     if [ -n "$mbkernel" -a -n "$cfgLilo" -a "$liloFlag" != "elilo" ]; then
 @@ -211,10 +206,10 @@
  
  mkinitrd() {
