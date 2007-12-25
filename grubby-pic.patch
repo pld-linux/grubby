@@ -1,0 +1,32 @@
+--- mkinitrd-6.0.24/nash/Makefile.orig	2007-12-25 19:19:21.287458000 +0100
++++ mkinitrd-6.0.24/nash/Makefile	2007-12-25 19:32:04.462821822 +0100
+@@ -28,6 +28,8 @@
+ nash :: version.h $(OBJECTS) libnash.so
+ 	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(nash_LIBPATHS) -lnash -lbdevid $(nash_LIBS)
+ 
++$(libnash_OBJECTS) :: CFLAGS += -fPIC
++
+ libnash.so : libnash.so.$(VERSION)
+ 	ln -sf $< $@
+ 
+--- mkinitrd-6.0.24/bdevid/Makefile.orig	2007-12-25 19:35:07.966261000 +0100
++++ mkinitrd-6.0.24/bdevid/Makefile	2007-12-25 19:37:28.007307340 +0100
+@@ -32,6 +32,8 @@
+ bdevid :: command.o
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(command_LIBS)
+ 
++$(bdevid_OBJECTS) $(foreach o, $(MODULES), ${o}.o) :: CFLAGS += -fPIC
++
+ $(foreach lib,$(MODULES),$(lib).so) :: %.so : %.o ../nash/wrap.o libbdevidprobe.a
+ 	$(CC) $(LDFLAGS) -shared -Wl,-soname="$*.so.$(VERSION)" -o $@ $< ../nash/wrap.o $($*_LIBS) -lbdevidprobe
+ 
+--- mkinitrd-6.0.24/bdevid/python/Makefile.orig	2007-12-14 21:11:23.000000000 +0100
++++ mkinitrd-6.0.24/bdevid/python/Makefile	2007-12-25 19:41:02.229105531 +0100
+@@ -10,6 +10,7 @@
+ CFLAGS += -I/usr/include/python$(PYVER)
+ CFLAGS += -I$(TOPDIR)/nash/include -I$(TOPDIR)/bdevid/include
+ CFLAGS += $(shell pkg-config --cflags glib-2.0)
++CFLAGS += -fPIC
+ LDFLAGS = -shared -L$(TOPDIR)/nash -L$(TOPDIR)/bdevid
+ LDFLAGS += -Wl,-soname="pybdevid.so.$(VERSION)",--as-needed
+ LDFLAGS += -lpython$(PYVER) -ldl $(shell pkg-config --libs glib-2.0)
