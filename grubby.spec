@@ -1,3 +1,4 @@
+#
 # Conditional build:
 %bcond_without	tests		# skip tests
 #
@@ -43,28 +44,42 @@ startowym.
 
 %package -n bdevid
 Summary:	Boot-time device identification
+Summary(pl.UTF-8):	Identyfikacja urządzeń w trakcie startu systemu
 Group:		Base
 Requires:	bdevid-libs = %{version}-%{release}
 
 %description -n bdevid
 Boot-time device identification.
 
+%description -n bdevid -l pl.UTF-8
+Identyfikacja urządzeń w trakcie startu systemu.
+
 %package -n bdevid-libs
-Summary:	Boot-time device identification libraries
-Group:		Development/Libraries
+Summary:	Boot-time device identification library
+Summary(pl.UTF-8):	Biblioteka do identyfikacji urządzeń w trakcie startu systemu
+Group:		Libraries
 
 %description -n bdevid-libs
-Boot-time device identification libraries.
+Boot-time device identification library.
+
+%description -n bdevid-libs -l pl.UTF-8
+Biblioteka do identyfikacji urządzeń w trakcie startu systemu.
 
 %package -n bdevid-devel
-Summary:	Headers and libraries for programs using bdevid
+Summary:	Development files for bdevid library
+Summary(pl.UTF-8):	Pliki programistyczne biblioteki bdevid
 Group:		Development/Libraries
+Requires:	bdevid-libs = %{version}-%{release}
 
 %description -n bdevid-devel
-Headers and libraries for programs using bdevid.
+Development files for bdevid library.
+
+%description -n bdevid-devel -l pl.UTF-8
+Pliki programistyczne biblioteki bdevid.
 
 %package -n python-bdevid
 Summary:	Python bindings for bdevid
+Summary(pl.UTF-8):	Wiązania Pythona do biblioteki bdevid
 Group:		Libraries/Python
 Requires:	bdevid-libs = %{version}-%{release}
 Requires:	nash-libs = %{version}-%{release}
@@ -72,12 +87,19 @@ Requires:	nash-libs = %{version}-%{release}
 %description -n python-bdevid
 Python bindings for bdevid.
 
+%description -n python-bdevid -l pl.UTF-8
+Wiązania Pythona do biblioteki bdevid.
+
 %package -n nash-libs
-Summary:	Nash libraries
-Group:		Development/Libraries
+Summary:	Nash library
+Summary(pl.UTF-8):	Biblioteka nasha
+Group:		Libraries
 
 %description -n nash-libs
-Nash libraries.
+Nash library.
+
+%description -n nash-libs -l pl.UTF-8
+Biblioteka nasha.
 
 %prep
 %setup -q -n mkinitrd-%{version}
