@@ -7,7 +7,7 @@ Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji grub
 Name:		grubby
 Version:	6.0.24
 Release:	1
-License:	GPL
+License:	GPL v2
 Group:		Base
 Source0:	mkinitrd-%{version}.tar.bz2
 # Source0-md5:	4bcef73138bb05da98e54cbfe48cb8f1
@@ -15,6 +15,7 @@ Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch
 Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-c99.patch
+Patch4:		%{name}-pic.patch
 BuildRequires:	device-mapper-devel
 BuildRequires:	e2fsprogs-devel
 BuildRequires:	libdhcp-devel > 1.9
@@ -22,8 +23,6 @@ BuildRequires:	parted-devel >= 1.8.5
 BuildRequires:	popt-devel
 Requires:	geninitrd >= 8243
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%define		specflags_x86_64	-fPIC
 
 %define		_sbindir	/sbin
 
@@ -92,14 +91,26 @@ Wiązania Pythona do biblioteki bdevid.
 
 %package -n nash-libs
 Summary:	Nash library
-Summary(pl.UTF-8):	Biblioteka nasha
+Summary(pl.UTF-8):	Biblioteka nash
 Group:		Libraries
 
 %description -n nash-libs
 Nash library.
 
 %description -n nash-libs -l pl.UTF-8
-Biblioteka nasha.
+Biblioteka nash.
+
+%package -n nash-devel
+Summary:	Header files for nash library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki nash
+Group:		Development/Libraries
+Requires:	nash-libs = %{version}-%{release}
+
+%description -n nash-devel
+Header files for nash library.
+
+%description -n nash-devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki nash.
 
 %prep
 %setup -q -n mkinitrd-%{version}
@@ -107,12 +118,13 @@ Biblioteka nasha.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
-#cd %{name}
 CFLAGS="%{rpmcflags}"; export CFLAGS
 %{__make} \
-	CC="%{__cc}"
+	CC="%{__cc}" \
+	LIB=%{_lib}
 
 %if %{with tests}
 %{__make} test
@@ -123,6 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	LIB=%{_lib} \
 	mandir=%{_mandir}
 
 install installkernel $RPM_BUILD_ROOT%{_sbindir}
@@ -146,12 +159,12 @@ rm -rf $RPM_BUILD_ROOT
 %files -n bdevid
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/bdevid
-%dir /lib/bdevid
-%attr(755,root,root) /lib/bdevid/*.so
 
 %files -n bdevid-libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libbdevid.so.*.*.*
+%attr(755,root,root) %{_libdir}/libbdevid.so.%{version}
+%dir /%{_lib}/bdevid
+%attr(755,root,root) /%{_lib}/bdevid/*.so
 
 %files -n bdevid-devel
 %defattr(644,root,root,755)
@@ -159,7 +172,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libbdevidprobe.a
 %{_includedir}/bdevid.h
 %{_includedir}/bdevid
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/libbdevid.pc
+%{_pkgconfigdir}/libbdevidprobe.pc
 
 %files -n python-bdevid
 %defattr(644,root,root,755)
@@ -167,4 +181,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n nash-libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libnash.so.*.*.*
+%attr(755,root,root) %{_libdir}/libnash.so.%{version}
+
+%files -n nash-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libnash.so
+%{_includedir}/blkent.h
+%{_includedir}/nash.h
+%{_includedir}/nash
+%{_pkgconfigdir}/libnash.pc
