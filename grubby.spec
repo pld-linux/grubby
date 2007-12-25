@@ -130,6 +130,12 @@ install installkernel $RPM_BUILD_ROOT%{_sbindir}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-n bdevid-libs -p /sbin/ldconfig
+%postun	-n bdevid-libs -p /sbin/ldconfig
+
+%post	-n nash-libs -p /sbin/ldconfig
+%postun	-n nash-libs -p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/new-kernel-pkg
