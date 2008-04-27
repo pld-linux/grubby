@@ -1,0 +1,11 @@
+--- mkinitrd-5.0.4/grubby/new-kernel-pkg~	2008-04-27 20:41:41.000000000 +0300
++++ mkinitrd-5.0.4/grubby/new-kernel-pkg	2008-04-27 20:42:10.567866463 +0300
+@@ -268,7 +268,7 @@
+ 
+ 	--multiboot*)
+ 	    if echo $1 |grep '=' >/dev/null; then
+-		mbkernel=`echo $1 | sed's/^--multiboot=//'`
++		mbkernel=`echo $1 | sed 's/^--multiboot=//'`
+ 	    else
+ 		# can't really support having an optional second arg here
+ 		# sorry!
