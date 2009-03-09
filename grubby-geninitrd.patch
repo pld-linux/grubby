@@ -1,5 +1,5 @@
---- mkinitrd-6.0.9/grubby/new-kernel-pkg~	2007-12-15 17:35:33.000000000 +0200
-+++ mkinitrd-6.0.9/grubby/new-kernel-pkg	2007-12-15 17:41:08.258802271 +0200
+--- mkinitrd-6.0.9/grubby/new-kernel-pkg	2007-12-15 17:41:08.258802271 +0200
++++ mkinitrd-6.0.24/grubby/new-kernel-pkg	2009-03-10 01:01:43.373402943 +0200
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/bin/sh
@@ -14,15 +14,7 @@
  
  lilo=/sbin/lilo
  
-@@ -23,6 +24,7 @@
- fi
- 
- [ -f /etc/sysconfig/kernel ] && . /etc/sysconfig/kernel
-+. /etc/geninitrd/functions
- 
- cfgGrub=""
- cfgLilo=""
-@@ -116,15 +116,11 @@
+@@ -114,15 +115,12 @@
  	return
      fi
  
@@ -36,6 +28,7 @@
 -	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
 -	fi
 +    # get the root filesystem to use
++    . /lib/geninitrd/functions
 +    find_root /etc/fstab || exit
 +    rootdevice=$rootdev
 +    if [ -z "$rootdevice" ]; then
@@ -43,7 +36,7 @@
      fi
  
      if [ -n "$mbkernel" -a -n "$cfgLilo" -a "$liloFlag" != "elilo" ]; then
-@@ -211,10 +206,10 @@
+@@ -208,10 +206,10 @@
  
  mkinitrd() {
      [ -n "$verbose" ] && echo "creating initrd $initrdfile using $version"
@@ -56,7 +49,7 @@
  	exit 1
      fi
  }
-@@ -234,7 +229,6 @@
+@@ -231,7 +229,6 @@
      [ -d /lib/modules/$version ] && rm -f /lib/modules/$version/modules.*    
  }
  
