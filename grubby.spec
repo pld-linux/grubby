@@ -5,7 +5,7 @@ Summary:	Command line tool for configuring grub, lilo, and elilo
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	5.0.4
-Release:	3
+Release:	4
 License:	GPL
 Group:		Base
 Source0:	mkinitrd-%{version}.tar.bz2
@@ -16,7 +16,7 @@ Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-poptshared.patch
 Patch4:		%{name}-xen.patch
 BuildRequires:	popt-devel
-Requires:	geninitrd >= 8243
+Requires:	geninitrd >= 10000.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
