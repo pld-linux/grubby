@@ -33,11 +33,13 @@
  
  $(libnash_OBJECTS) :: CFLAGS += -fPIC
  
---- mkinitrd-6.0.86/bdevid/Makefile~	2009-05-28 00:26:05.000000000 +0300
-+++ mkinitrd-6.0.86/bdevid/Makefile	2009-05-28 00:26:07.290963805 +0300
-@@ -22,12 +22,10 @@
+--- mkinitrd-6.0.86/bdevid/Makefile	2009-05-28 00:26:07.290963805 +0300
++++ mkinitrd-6.0.86/bdevid/Makefile	2009-05-28 00:39:22.110658013 +0300
+@@ -21,13 +21,12 @@
+ export TOPDIR
  
  bdevid_OBJECTS = bdevid.o module.o probe.o sysfs.o probelib.o
++bdevid_OBJECTS += ../nash/wrap.o
  bdevid_LIBS := -L. -L$(TOPDIR)/nash -ldl
 -bdevid_LIBS += -lnash -lparted -lblkid -luuid -ldevmapper -lselinux -lsepol
  
@@ -48,13 +50,13 @@
  
  MODULES = scsi ata usb
  OBJECTS = $(bdevid_OBJECTS)
-@@ -45,15 +43,17 @@
+@@ -45,14 +44,16 @@
  LDFLAGS += -Wl,-rpath-link,$(TOPDIR)/nash:$(TOPDIR)/bdevid
  LDFLAGS += -L$(TOPDIR)/nash -L$(TOPDIR)/bdevid
  
 -bdevid :: command.o
 -	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(command_LIBS)
-+bdevid :: command.o ../nash/wrap.o libbdevid.so
++bdevid :: command.o libbdevid.so
 +	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< ../nash/wrap.o $(command_LIBS)
  
  $(bdevid_OBJECTS) $(foreach o, $(MODULES), $(o).o) :: CFLAGS += -fPIC
@@ -67,7 +69,6 @@
  libbdevid.so.$(VERSION) : $(bdevid_OBJECTS)
  	$(CC) $(LDFLAGS) -shared -Wl,-soname="$(shell basename $@)" -o $@ $(bdevid_OBJECTS) $(bdevid_LIBS)
  
- libbdevidprobe.a : $(bdevidprobe_OBJECTS)
 --- mkinitrd-6.0.86/bdevid/python/Makefile~	2009-05-28 00:27:36.000000000 +0300
 +++ mkinitrd-6.0.86/bdevid/python/Makefile	2009-05-28 00:27:55.486773297 +0300
 @@ -34,7 +34,7 @@
