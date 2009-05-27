@@ -23,8 +23,8 @@
 -# We need to link against libgcc_s directly, or it'll /dlopen() it during
 -# backtrace()!  This is not teh way!!!1!!!one!!!.
 -nash_LIBS += -lgcc_s
-+nash_LIBS += -ldevmapper -lparted -lblkid -ldl -lbdevid
-+nash_prog_LIBS = -lnash -lresolv -lelf -lpopt
++nash_LIBS += -ldevmapper -lparted -lblkid -ldl
++nash_prog_LIBS = -lnash -lresolv -lelf -lpopt -lbdevid
 +nash_prog_LIBS += $(shell pkg-config --libs libnl-1)
  
  nash :: version.h $(OBJECTS) libnash.so
