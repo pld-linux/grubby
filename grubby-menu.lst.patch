@@ -1,21 +1,21 @@
---- mkinitrd-4.1.18/grubby/grubby.c~	2004-08-24 22:10:23.000000000 +0300
-+++ mkinitrd-4.1.18/grubby/grubby.c	2005-01-05 22:52:16.000000000 +0200
-@@ -97,7 +97,7 @@
+--- mkinitrd-6.0.86/grubby/grubby.c~	2009-05-21 22:14:01.000000000 +0300
++++ mkinitrd-6.0.86/grubby/grubby.c	2009-05-27 23:36:24.400378963 +0300
+@@ -140,7 +140,7 @@
  };
  
  struct configFileInfo grubConfigType = {
--    "/boot/grub/grub.conf",		    /* defaultConfig */
-+    "/boot/grub/menu.lst",		    /* defaultConfig */
+-    "/etc/grub.conf",			    /* defaultConfig */
++    "/boot/grub/menu.lst",			    /* defaultConfig */
      grubKeywords,			    /* keywords */
      1,					    /* defaultIsIndex */
      1,					    /* defaultSupportSaved */
---- ../grubby/new-kernel-pkg~	2005-06-01 20:06:00.000000000 +0300
-+++ ../grubby/new-kernel-pkg	2005-06-06 22:06:35.000000000 +0300
-@@ -59,7 +59,7 @@
+--- mkinitrd-6.0.86/grubby/new-kernel-pkg~	2009-05-21 22:14:01.000000000 +0300
++++ mkinitrd-6.0.86/grubby/new-kernel-pkg	2009-05-27 23:36:55.383790363 +0300
+@@ -73,7 +73,7 @@
  else
      # this leaves i?86 and x86_64
      liloConfig=/etc/lilo.conf
--    grubConfig=/boot/grub/grub.conf
+-    grubConfig=$(readlink -f /etc/grub.conf 2>/dev/null)
 +    grubConfig=/boot/grub/menu.lst
      bootPrefix=/boot
      liloFlag=lilo

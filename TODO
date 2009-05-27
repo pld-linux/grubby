@@ -1,0 +1,9 @@
+Library symbols loop:
+Unresolved symbols found in: libnash.so.6.0.86
+        bdevid_pr_getattr                                                                                                                    
+        bdevid_module_load                                                                                                                   
+        bdevid_new                                                                                                                           
+        bdevid_destroy                                                                                                                       
+        bdevid_probe                                                                                                                         
+
+while bdevid needs nash being built first

@@ -5,20 +5,22 @@
 Summary:	Command line tool for configuring grub, lilo, and elilo
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
-Version:	6.0.24
-Release:	4
+Version:	6.0.86
+Release:	0.5
 License:	GPL v2
 Group:		Base
 Source0:	mkinitrd-%{version}.tar.bz2
-# Source0-md5:	4bcef73138bb05da98e54cbfe48cb8f1
+# Source0-md5:	b1407f7cc45f730027d535b24c9fe2e6
 Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch
 Patch2:		%{name}-geninitrd.patch
 Patch3:		%{name}-c99.patch
 Patch4:		%{name}-pic.patch
+Patch5:		%{name}-nolibs.patch
 BuildRequires:	device-mapper-devel
-BuildRequires:	e2fsprogs-devel
+BuildRequires:	libblkid-devel
 BuildRequires:	libdhcp-devel > 1.9
+BuildRequires:	libnl-devel
 BuildRequires:	parted-devel >= 1.8.5
 BuildRequires:	popt-devel
 Requires:	geninitrd >= 10000.3
@@ -119,12 +121,15 @@ Pliki nagłówkowe biblioteki nash.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
-CFLAGS="%{rpmcflags}"; export CFLAGS
+# their flags from Makefile.inc, if problem resync
+export CFLAGS="%{rpmcflags} -Wall -g -D_FORTIFY_SOURCE=2 -Wno-unused-function -fPIC -std=gnu99 -D_GNU_SOURCE=1" 
+export LDFLAGS="%{rpmldflags} -Wl,--wrap,open,--wrap,fopen,--wrap,opendir,--wrap,socket -Wl,--wrap,pipe,--wrap,mkdir,--wrap,access" 
 %{__make} \
 	CC="%{__cc}" \
-	LIB=%{_lib}
+	LIB=%{_lib} \
 
 %if %{with tests}
 %{__make} test
@@ -139,6 +144,14 @@ rm -rf $RPM_BUILD_ROOT
 	mandir=%{_mandir}
 
 install installkernel $RPM_BUILD_ROOT%{_sbindir}
+
+# we don't use these
+rm -f $RPM_BUILD_ROOT%{_sbindir}/{ls,mk}initrd
+rm -f $RPM_BUILD_ROOT%{_prefix}/libexec/initrd-functions
+rm -f $RPM_BUILD_ROOT%{_prefix}/libexec/mkliveinitrd
+rm -f $RPM_BUILD_ROOT%{_sbindir}/nash
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/mkinitrd.8*
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/nash.8*
 
 %clean
 rm -rf $RPM_BUILD_ROOT

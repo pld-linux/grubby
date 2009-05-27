@@ -15,18 +15,18 @@
  bdevid :: command.o
  	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(command_LIBS)
  
-+$(bdevid_OBJECTS) $(foreach o, $(MODULES), ${o}.o) :: CFLAGS += -fPIC
++$(bdevid_OBJECTS) $(foreach o, $(MODULES), $(o).o) :: CFLAGS += -fPIC
 +
  $(foreach lib,$(MODULES),$(lib).so) :: %.so : %.o ../nash/wrap.o libbdevidprobe.a
  	$(CC) $(LDFLAGS) -shared -Wl,-soname="$*.so.$(VERSION)" -o $@ $< ../nash/wrap.o $($*_LIBS) -lbdevidprobe
  
---- mkinitrd-6.0.24/bdevid/python/Makefile.orig	2007-12-14 21:11:23.000000000 +0100
-+++ mkinitrd-6.0.24/bdevid/python/Makefile	2007-12-25 19:41:02.229105531 +0100
-@@ -10,6 +10,7 @@
+--- mkinitrd-6.0.86/bdevid/python/Makefile~	2009-05-21 22:14:01.000000000 +0300
++++ mkinitrd-6.0.86/bdevid/python/Makefile	2009-05-27 23:38:44.594917180 +0300
+@@ -28,6 +28,7 @@
+ PYVER := $(shell python -c "import sys; print sys.version[0:3]")
  CFLAGS += -I/usr/include/python$(PYVER)
  CFLAGS += -I$(TOPDIR)/nash/include -I$(TOPDIR)/bdevid/include
- CFLAGS += $(shell pkg-config --cflags glib-2.0)
 +CFLAGS += -fPIC
  LDFLAGS = -shared -L$(TOPDIR)/nash -L$(TOPDIR)/bdevid
  LDFLAGS += -Wl,-soname="pybdevid.so.$(VERSION)",--as-needed
- LDFLAGS += -lpython$(PYVER) -ldl $(shell pkg-config --libs glib-2.0)
+ LDFLAGS += -lpython$(PYVER) -ldl
