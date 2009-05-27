@@ -11,8 +11,8 @@
  
  test: all
  	@export TOPDIR=$(TOPDIR)
---- mkinitrd-6.0.86/nash/Makefile~	2009-05-28 00:09:39.000000000 +0300
-+++ mkinitrd-6.0.86/nash/Makefile	2009-05-28 00:10:56.307732260 +0300
+--- mkinitrd-6.0.86/nash/Makefile	2009-05-28 00:10:56.307732260 +0300
++++ mkinitrd-6.0.86/nash/Makefile	2009-05-28 00:59:35.874404300 +0300
 @@ -37,15 +37,12 @@
  LDFLAGS += -Wl,-rpath-link,$(TOPDIR)/bdevid:$(TOPDIR)/nash
  
@@ -23,7 +23,7 @@
 -# We need to link against libgcc_s directly, or it'll /dlopen() it during
 -# backtrace()!  This is not teh way!!!1!!!one!!!.
 -nash_LIBS += -lgcc_s
-+nash_LIBS += -ldevmapper -lparted -lblkid -ldl
++nash_LIBS += -ldevmapper -lparted -lblkid
 +nash_prog_LIBS = -lnash -lresolv -lelf -lpopt -lbdevid
 +nash_prog_LIBS += $(shell pkg-config --libs libnl-1)
  
