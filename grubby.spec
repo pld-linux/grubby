@@ -6,7 +6,7 @@ Summary:	Command line tool for configuring grub, lilo, and elilo
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	6.0.24
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Base
 Source0:	mkinitrd-%{version}.tar.bz2
