@@ -14,5 +14,13 @@ ppoll([{fd=3, events=POLLIN|POLLPRI|POLLERR|POLLHUP|0x400}], 1, {0, 1}, NULL, 0)
 ppoll([{fd=3, events=POLLIN|POLLPRI|POLLERR|POLLHUP|0x400}], 1, {0, 1}, NULL, 0) = -1 ENOSYS (Function not implemented)
 ppoll([{fd=3, events=POLLIN|POLLPRI|POLLERR|POLLHUP|0x400}], 1, {0, 1}, NULL, 0) = -1 ENOSYS (Function not implemented)
 
-fd=3: (netlink?):
+fd=3: netlink:
 grubby  16213 root    3u  sock    0,5         92020671 can't identify protocol
+
+yup: netlink
+[pid 17436] socket(PF_NETLINK, SOCK_DGRAM, 15) = 3
+[pid 17436] fcntl(3, F_GETFD)           = 0
+[pid 17436] fcntl(3, F_SETFD, FD_CLOEXEC) = 0
+[pid 17436] fcntl(3, F_GETFD)           = 0x1 (flags FD_CLOEXEC)
+[pid 17436] fcntl(3, F_SETFD, FD_CLOEXEC) = 0
+[pid 17436] bind(3, {sa_family=AF_NETLINK, pid=17436, groups=ffffffff}, 12) = 0
