@@ -1,9 +1,18 @@
 Library symbols loop:
 Unresolved symbols found in: libnash.so.6.0.86
-        bdevid_pr_getattr                                                                                                                    
-        bdevid_module_load                                                                                                                   
-        bdevid_new                                                                                                                           
-        bdevid_destroy                                                                                                                       
-        bdevid_probe                                                                                                                         
+        bdevid_pr_getattr
+        bdevid_module_load
+        bdevid_new
+        bdevid_destroy
+        bdevid_probe
 
 while bdevid needs nash being built first
+
+
+-- if ran on older kernel (?) then ends up in deadloop (missing EPOLL?):
+ppoll([{fd=3, events=POLLIN|POLLPRI|POLLERR|POLLHUP|0x400}], 1, {0, 1}, NULL, 0) = -1 ENOSYS (Function not implemented)
+ppoll([{fd=3, events=POLLIN|POLLPRI|POLLERR|POLLHUP|0x400}], 1, {0, 1}, NULL, 0) = -1 ENOSYS (Function not implemented)
+ppoll([{fd=3, events=POLLIN|POLLPRI|POLLERR|POLLHUP|0x400}], 1, {0, 1}, NULL, 0) = -1 ENOSYS (Function not implemented)
+
+fd=3: (netlink?):
+grubby  16213 root    3u  sock    0,5         92020671 can't identify protocol
