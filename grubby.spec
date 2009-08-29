@@ -6,7 +6,7 @@ Summary:	Command line tool for updating bootloader configs
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
 Version:	7.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Base
 # git clone git://git.fedorahosted.org/git/grubby.git
