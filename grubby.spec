@@ -19,7 +19,6 @@ Patch1:		%{name}-pld.patch
 Patch2:		%{name}-geninitrd.patch
 BuildRequires:	glib2-devel
 BuildRequires:	libblkid-devel
-BuildRequires:	libblkid-devel
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 Requires:	geninitrd >= 10000.3
