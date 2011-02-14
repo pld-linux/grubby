@@ -1,37 +1,26 @@
---- grubby-7.0/new-kernel-pkg~	2009-07-16 12:26:14.000000000 +0300
-+++ grubby-7.0/new-kernel-pkg	2009-07-16 12:29:41.029773021 +0300
+--- grubby-7.0.16/new-kernel-pkg~	2011-02-14 13:51:39.000000000 +0200
++++ grubby-7.0.16/new-kernel-pkg	2011-02-14 13:53:52.900519027 +0200
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/bin/sh
  #
  # Invoked upon installation or removal of a kernel package, the following
  # tasks are/can be done here:
-@@ -114,15 +115,12 @@
- 	return
+@@ -139,7 +139,9 @@
      fi
  
--    # get the root filesystem to use; if it's on a label make sure it's
--    # been configured. if not, get the root device from mount
+     # get the root filesystem to use
 -    rootdevice=$(awk '{ if ($1 !~ /^[ \t]*#/ && $2 == "/") { print $1; }}' /etc/fstab)
--    short=$(echo $rootdevice | cut -d= -f1)
--    if [ "$short" == "LABEL" -o "$short" == "UUID" ]; then
--	device=$(echo resolveDevice "$rootdevice" | /sbin/nash  --forcequiet)
--	if [ -z "$device" ]; then
--	    rootdevice=$(mount | awk '$3 == "/" { print $1 }')
--	fi
-+    # get the root filesystem to use
 +    . /lib/geninitrd/functions
 +    find_root /etc/fstab || exit
 +    rootdevice=$rootdev
-+    if [ -z "$rootdevice" ]; then
-+	rootdevice=$(mount | awk '$3 == "/" { print $1 }')
-     fi
  
      if [ -n "$mbkernel" -a -n "$cfgLilo" -a "$liloFlag" != "elilo" ]; then
-@@ -268,6 +268,8 @@
+ 	[ -n "$verbose" ] && echo "multiboot specified, not updating lilo.conf"
+@@ -289,6 +291,8 @@
  mkinitrd() {
-     if [ -n "$USEDRACUT" -a -x /sbin/dracut ]; then
-         tool="/sbin/dracut -f $initrdfile $version"
+     if [ -n "$dracut" ]; then
+         tool="/sbin/dracut $dracuthostonly -f $initrdfile $version"
 +    elif [ -x /sbin/geninitrd ]; then
 +	tool="/sbin/geninitrd -f --initrdfs=rom $initrdfile $version"
      else

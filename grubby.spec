@@ -1,18 +1,16 @@
 #
 # Conditional build:
 %bcond_without	tests		# skip tests
-#
+
 Summary:	Command line tool for updating bootloader configs
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
-Version:	7.0
-Release:	2
+Version:	7.0.16
+Release:	1
 License:	GPL v2
 Group:		Base
-# git clone git://git.fedorahosted.org/git/grubby.git
-# git archive --format=tar --prefix=grubby-%{version}/ HEAD | bzip2 > grubby-%{version}.tar.bz2
-Source0:	%{name}-%{version}.tar.bz2
-# Source0-md5:	6c2fe5d01dc392abb8d05d43fc79416a
+Source0:	http://pkgs.fedoraproject.org/repo/pkgs/grubby/%{name}-%{version}.tar.bz2/d838a5f794573f5704248b8322bf3643/grubby-%{version}.tar.bz2
+# Source0-md5:	d838a5f794573f5704248b8322bf3643
 URL:		http://git.fedorahosted.org/git/grubby.git
 Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch
@@ -71,3 +69,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/grubby
 %attr(755,root,root) %{_sbindir}/installkernel
 %{_mandir}/man8/grubby.8*
+%{_mandir}/man8/installkernel.8*
+%{_mandir}/man8/new-kernel-pkg.8*
