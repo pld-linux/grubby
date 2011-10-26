@@ -1,22 +1,22 @@
---- mkinitrd-6.0.86/grubby/grubby.c~	2009-05-21 22:14:01.000000000 +0300
-+++ mkinitrd-6.0.86/grubby/grubby.c	2009-05-27 23:36:24.400378963 +0300
-@@ -140,7 +140,7 @@
+--- grubby-8.3/grubby.c~	2011-09-29 23:38:12.000000000 +0300
++++ grubby-8.3/grubby.c	2011-10-26 12:10:12.124419102 +0300
+@@ -157,7 +157,7 @@
  };
  
  struct configFileInfo grubConfigType = {
--    "/etc/grub.conf",			    /* defaultConfig */
-+    "/boot/grub/menu.lst",			    /* defaultConfig */
-     grubKeywords,			    /* keywords */
-     1,					    /* defaultIsIndex */
-     1,					    /* defaultSupportSaved */
---- mkinitrd-6.0.86/grubby/new-kernel-pkg~	2009-05-21 22:14:01.000000000 +0300
-+++ mkinitrd-6.0.86/grubby/new-kernel-pkg	2009-05-27 23:36:55.383790363 +0300
-@@ -73,7 +73,7 @@
+-    .defaultConfig = "/etc/grub.conf",
++    .defaultConfig = "/boot/grub/menu.lst",
+     .keywords = grubKeywords,
+     .defaultIsIndex = 1,
+     .defaultSupportSaved = 1,
+--- grubby-8.3/new-kernel-pkg~	2011-09-29 23:38:12.000000000 +0300
++++ grubby-8.3/new-kernel-pkg	2011-10-26 12:11:06.743604439 +0300
+@@ -91,7 +91,7 @@
  else
      # this leaves i?86 and x86_64
      liloConfig=/etc/lilo.conf
 -    grubConfig=$(readlink -f /etc/grub.conf 2>/dev/null)
 +    grubConfig=/boot/grub/menu.lst
+     grub2Config=$(readlink -f /etc/grub2.cfg 2>/dev/null)
+     grub2EfiConfig=$(readlink -f /etc/grub2-efi.cfg 2>/dev/null)
      bootPrefix=/boot
-     liloFlag=lilo
-     isx86="yes"

@@ -5,12 +5,12 @@
 Summary:	Command line tool for updating bootloader configs
 Summary(pl.UTF-8):	Działające z linii poleceń narzędzie do konfiguracji gruba, lilo i elilo
 Name:		grubby
-Version:	7.0.16
+Version:	8.3
 Release:	1
 License:	GPL v2
 Group:		Base
-Source0:	http://pkgs.fedoraproject.org/repo/pkgs/grubby/%{name}-%{version}.tar.bz2/d838a5f794573f5704248b8322bf3643/grubby-%{version}.tar.bz2
-# Source0-md5:	d838a5f794573f5704248b8322bf3643
+Source0:	http://pkgs.fedoraproject.org/repo/pkgs/grubby/%{name}-%{version}.tar.bz2/b8ca2090b1ef8c107f0e5f5caa26f2f1/%{name}-%{version}.tar.bz2
+# Source0-md5:	b8ca2090b1ef8c107f0e5f5caa26f2f1
 URL:		http://git.fedorahosted.org/git/grubby.git
 Patch0:		%{name}-menu.lst.patch
 Patch1:		%{name}-pld.patch
@@ -41,7 +41,7 @@ startowym.
 
 %prep
 %setup -q
-%patch0 -p2
+%patch0 -p1
 %patch1 -p2
 %patch2 -p1
 
