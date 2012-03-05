@@ -1,14 +1,3 @@
---- grubby-8.3/grubby.c~	2011-09-29 23:38:12.000000000 +0300
-+++ grubby-8.3/grubby.c	2011-10-26 12:10:12.124419102 +0300
-@@ -157,7 +157,7 @@
- };
- 
- struct configFileInfo grubConfigType = {
--    .defaultConfig = "/etc/grub.conf",
-+    .defaultConfig = "/boot/grub/menu.lst",
-     .keywords = grubKeywords,
-     .defaultIsIndex = 1,
-     .defaultSupportSaved = 1,
 --- grubby-8.3/new-kernel-pkg~	2011-09-29 23:38:12.000000000 +0300
 +++ grubby-8.3/new-kernel-pkg	2011-10-26 12:11:06.743604439 +0300
 @@ -91,7 +91,7 @@
@@ -20,3 +9,17 @@
      grub2Config=$(readlink -f /etc/grub2.cfg 2>/dev/null)
      grub2EfiConfig=$(readlink -f /etc/grub2-efi.cfg 2>/dev/null)
      bootPrefix=/boot
+--- grubby-8.9/grubby.8~	2012-03-03 00:13:40.000000000 +0200
++++ grubby-8.9/grubby.8	2012-03-05 16:52:06.992164349 +0200
+@@ -23,9 +23,9 @@
+ kernels and need to find information about the current boot environment.
+ 
+ On Intel x86 platforms, \fBgrub\fR is the default bootloader and the
+-configuration file is in \fB/boot/grub/grub.conf\fR. On Intel ia64 platforms, 
++configuration file is in \fB/boot/grub/menu.lst\fR. On Intel ia64 platforms, 
+ \fBelilo\fR mode is used and the default location for the configuration file 
+-is \fB/boot/grub/grub.conf\fR. On PowerPC platforms, \fByaboot\fR parsing
++is \fB/boot/grub/menu.lst\fR. On PowerPC platforms, \fByaboot\fR parsing
+ is used and the configuration file should be in \fB/etc/yaboot.conf\fR.
+ 
+ There are a number of ways to specify the kernel used for \fB-\-info\fR,

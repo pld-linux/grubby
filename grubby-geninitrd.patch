@@ -1,5 +1,5 @@
---- grubby-7.0.16/new-kernel-pkg~	2011-02-14 13:51:39.000000000 +0200
-+++ grubby-7.0.16/new-kernel-pkg	2011-02-14 13:53:52.900519027 +0200
+--- grubby-8.9/./new-kernel-pkg~	2012-03-05 16:52:13.000000000 +0200
++++ grubby-8.9/./new-kernel-pkg	2012-03-05 16:53:00.714608856 +0200
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/bin/sh
@@ -17,12 +17,12 @@
  
      if [ -n "$mbkernel" -a -n "$cfgLilo" -a "$liloFlag" != "elilo" ]; then
  	[ -n "$verbose" ] && echo "multiboot specified, not updating lilo.conf"
-@@ -289,6 +291,8 @@
+@@ -509,6 +509,8 @@
  mkinitrd() {
      if [ -n "$dracut" ]; then
-         tool="/sbin/dracut $dracuthostonly -f $initrdfile $version"
-+    elif [ -x /sbin/geninitrd ]; then
+         tool="dracut $dracuthostonly -f $initrdfile $version"
++    elif [ -x "/sbin/geninitrd" ]; then
 +	tool="/sbin/geninitrd -f $initrdfile $version"
      else
- 	tool="/sbin/mkinitrd --allow-missing -f $initrdfile $version"
+ 	tool="mkinitrd --allow-missing -f $initrdfile $version"
      fi
